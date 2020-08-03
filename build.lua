@@ -7,6 +7,11 @@ installfiles = {
 '*.sty'
 }
 
+specialformats = specialformats or {}
+specialformats["latex-dev"] = specialformats["latex-dev"] or
+  {
+    pdftex     = {format = "pdflatex-dev"},
+   }
 
 textfiles = {"README.md"}
 unpackfiles = {'pagesel.dtx'}
