@@ -4,14 +4,13 @@
 module = "pagesel"
 
 installfiles = {
-'*.sty',
-'*.dtx','*.pdf'
+'*.sty'
 }
 
 
 textfiles = {"README.md"}
 unpackfiles = {'pagesel.dtx'}
-
+checkruns=2
 
 function update_tag(file,content,tagname,tagdate)
 
