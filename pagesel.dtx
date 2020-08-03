@@ -117,7 +117,8 @@ https://github.com/ho-tex/pagesel/issues
 
 This work consists of the main source file pagesel.dtx
 and the derived files
-   pagesel.sty, pagesel.pdf, pagesel.ins, pagesel.drv.
+   pagesel.sty, pagesel-2016-05-16.sty, pagesel.pdf,
+   pagesel.ins, pagesel.drv.
 
 \endpreamble
 \let\MetaPrefix\DoubleperCent
@@ -286,12 +287,39 @@ and the derived files
 % }
 %
 % \section{Implementation}
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+% \subsection{New implementation using the LaTeX kernel hooks}
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{pagesel}
+  [2020-08-03 v1.10 Select pages of a document for output (HO)]%
+%    \end{macrocode}
+%    \end{macrocode}
+%    \begin{macrocode}
+\providecommand\IfFormatAtLeastTF{\@ifl@t@r\fmtversion}
+\IfFormatAtLeastTF{2020/10/01}{}{\input{pagesel-2016-05-16.sty}}
+\IfFormatAtLeastTF{2020/10/01}{}{\endinput}
+
+%    \end{macrocode}
+%    If the package is loaded twice, the package code does not
+%    work. So stop loading the package, if it is already loaded.
+%    \begin{macrocode}
+\@ifundefined{ps@oddpages}{}{%
+  \PackageWarningNoLine{pagesel}{Package already loaded.}%
+  \endinput
+}
+%    \end{macrocode}
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
 % \subsection{Package}
 %    \begin{macrocode}
 %<*packagefrozen>
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pagesel}
-  [2020-08-03 v1.10 Select pages of a document for output (HO)]%
+  [2020-08-03 v1.10 Select pages of a document for output (legacy code) (HO)]%
 %    \end{macrocode}
 %
 %    If the package is loaded twice, the package code does not
@@ -317,11 +345,13 @@ and the derived files
     \deadcycles=\count@
   \endgroup
 }
+%</packagefrozen>
 %    \end{macrocode}
 %    \end{macro}
 %
 %    \begin{macro}{\ps@oddpages}
 %    \begin{macrocode}
+%<*package|packagefrozen>
 \newcommand*\ps@oddpages{0}
 \DeclareOption{odd}{\renewcommand*\ps@oddpages{1}}
 \DeclareOption{even}{\renewcommand*\ps@oddpages{2}}
@@ -417,10 +447,14 @@ and the derived files
 %    \end{macrocode}
 %
 %    \begin{macrocode}
+%</package|packagefrozen>
+%<*packagefrozen>
 \RequirePackage{everyshi}
+%</packagefrozen>
 %    \end{macrocode}
 %
 %    \begin{macrocode}
+%<*package|packagefrozen>
 \ps@nofiles
 %    \end{macrocode}
 %
@@ -484,7 +518,10 @@ and the derived files
 %    \end{macro}
 %
 %    \begin{macrocode}
-\EveryShipout{%
+%</package|packagefrozen>
+%<packagefrozen>\EveryShipout{%
+%<package>\AddToHook{shipout/before}{%
+%<*package|packagefrozen>
   \stepcounter{ps@count}%
   \ifnum\value{ps@count}>\ps@lastpage\relax
     \global\output{%
@@ -506,52 +543,57 @@ and the derived files
   \let\ps@next\@empty
   \ifx\ps@testlist\@empty
   \else
-    \let\ps@next\ps@makevoid
+%<packagefrozen>    \let\ps@next\ps@makevoid
+%<package>    \let\ps@next\DiscardShipoutBox
     \ps@testlist
   \fi
   \ifnum\ps@oddpages=1 %
     \ifodd\value{ps@count}%
     \else
-      \let\ps@next\ps@makevoid
+%<packagefrozen>    \let\ps@next\ps@makevoid
+%<package>    \let\ps@next\DiscardShipoutBox
     \fi
   \fi
   \ifnum\ps@oddpages=2 %
     \ifodd\value{ps@count}%
-      \let\ps@next\ps@makevoid
+%<packagefrozen>    \let\ps@next\ps@makevoid
+%<package>    \let\ps@next\DiscardShipoutBox
     \else
     \fi
   \fi
-  \ps@begindvi
+%<packagefrozen>  \ps@begindvi
   \ps@next
 }
+%</package|packagefrozen>
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\begingroup\expandafter\expandafter\expandafter\endgroup
-\expandafter\ifx\csname currentiflevel\endcsname\relax
-  \let\ps@cleanup@if\@empty
-\else
+%<*package|packagefrozen>
+%<packagefrozen>\begingroup\expandafter\expandafter\expandafter\endgroup
+%<packagefrozen>\expandafter\ifx\csname currentiflevel\endcsname\relax
+%<packagefrozen>  \let\ps@cleanup@if\@empty
+%<packagefrozen>\else
   \def\ps@cleanup@if{%
     \ifnum\currentiflevel>\@ne
       \csname fi\endcsname
       \expandafter\ps@cleanup@if
     \fi
   }%
-\fi
+%<packagefrozen>\fi
 %    \end{macrocode}
 %    Because of \cs{aftergroup} it is too dangerous to perform
 %    a similar cleanup for groups.
 %    \begin{macrocode}
-\begingroup\expandafter\expandafter\expandafter\endgroup
-\expandafter\ifx\csname currentgrouplevel\endcsname\relax
-  \let\ps@group@message\@empty
-  \def\ps@message@ignore{%
-    \typeout{%
-      (pagesel) \space\space\@spaces\@spaces\@spaces
-      Messages (\string\end\space occurred ...) can be ignored.%
-    }%
-  }%
-\else
+%<packagefrozen> \begingroup\expandafter\expandafter\expandafter\endgroup
+%<packagefrozen> \expandafter\ifx\csname currentgrouplevel\endcsname\relax
+%<packagefrozen>  \let\ps@group@message\@empty
+%<packagefrozen>  \def\ps@message@ignore{%
+%<packagefrozen>    \typeout{%
+%<packagefrozen>      (pagesel) \space\space\@spaces\@spaces\@spaces
+%<packagefrozen>      Messages (\string\end\space occurred ...) can be ignored.%
+%<packagefrozen>    }%
+%<packagefrozen>  }%
+%<packagefrozen>\else
   \def\ps@group@message{%
     \ifnum\currentgrouplevel>\@ne
       \def\ps@message@ignore{%
@@ -565,7 +607,8 @@ and the derived files
       \let\ps@message@ignore\@empty
     \fi
   }%
-\fi
+%<packagefrozen>\fi
+%</package|packagefrozen>
 %    \end{macrocode}
 %
 % \subsection{AtBeginDvi hook support}
@@ -573,6 +616,7 @@ and the derived files
 %    The material of box \cs{@begindvibox} is recorded in parallel
 %    in box \cs{ps@begindvibox}.
 %    \begin{macrocode}
+%<*packagefrozen>
 \newbox\ps@begindvibox
 \ifvoid\@begindvibox
 \else
