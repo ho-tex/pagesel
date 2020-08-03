@@ -127,6 +127,7 @@ and the derived files
   \file{pagesel.drv}{\from{pagesel.dtx}{driver}}%
   \usedir{tex/latex/pagesel}%
   \file{pagesel.sty}{\from{pagesel.dtx}{package}}%
+  \file{pagesel-2016-05-16.sty}{\from{pagesel.dtx}{packagefrozen}}
 }
 
 \catcode32=13\relax% active space
@@ -287,7 +288,7 @@ and the derived files
 % \section{Implementation}
 % \subsection{Package}
 %    \begin{macrocode}
-%<*package>
+%<*packagefrozen>
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{pagesel}
   [2020-08-03 v1.10 Select pages of a document for output (HO)]%
@@ -615,7 +616,7 @@ and the derived files
 %    \end{macro}
 %
 %    \begin{macrocode}
-%</package>
+%</packagefrozen>
 %    \end{macrocode}
 %
 % \section{Installation}
@@ -630,25 +631,6 @@ and the derived files
 % \end{description}
 %
 %
-% \paragraph{Bundle.} All the packages of the bundle `oberdiek'
-% are also available in a TDS compliant ZIP archive. There
-% the packages are already unpacked and the documentation files
-% are generated. The files and directories obey the TDS standard.
-% \begin{description}
-% \item[\CTANinstall{install/macros/latex/contrib/oberdiek.tds.zip}]
-% \end{description}
-% \emph{TDS} refers to the standard ``A Directory Structure
-% for \TeX\ Files'' (\CTANpkg{tds}). Directories
-% with \xfile{texmf} in their name are usually organized this way.
-%
-% \subsection{Bundle installation}
-%
-% \paragraph{Unpacking.} Unpack the \xfile{oberdiek.tds.zip} in the
-% TDS tree (also known as \xfile{texmf} tree) of your choice.
-% Example (linux):
-% \begin{quote}
-%   |unzip oberdiek.tds.zip -d ~/texmf|
-% \end{quote}
 %
 % \subsection{Package installation}
 %
@@ -848,7 +830,8 @@ and the derived files
 %     Documentation updates.
 %   \end{Version}
 %   \begin{Version}{2020-08-03 v1.10}
-%   \item Updated
+%   \item Updated to the change in the hook management
+%   of LaTeX 2020/10/01
 %   \end{Version}
 % \end{History}
 %
