@@ -1,0 +1,12 @@
+\input{regression-test}
+\documentclass{article}
+\usepackage{kantlipsum}
+\usepackage[6]{pagesel}
+\begin{document}
+\START
+\showoutput
+\kant
+\begin{figure}\rule{1cm}{0.8\textheight}
+\end{figure}
+\kant
+\end{document}

@@ -8,14 +8,20 @@ installfiles = {
 }
 
 specialformats = specialformats or {}
+
+-- latex-dev formats, used in config-dev to test against upcoming latex
+-- here 2020-10-01
 specialformats["latex-dev"] = specialformats["latex-dev"] or
   {
     pdftex     = {format = "pdflatex-dev"},
+    luatex     = {binary = "luahbtex",format = "lualatex-dev"},
+    xetex      = {format = "xelatex-dev"},
    }
 
 textfiles = {"README.md"}
 unpackfiles = {'pagesel.dtx'}
 checkruns=2
+checkconfigs = {"build","config-dev"}
 
 function update_tag(file,content,tagname,tagdate)
 

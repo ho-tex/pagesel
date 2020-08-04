@@ -1,0 +1,14 @@
+%no selection.
+\input{regression-test}
+\documentclass{article}
+\usepackage{kantlipsum}
+\usepackage{pagesel}
+\begin{document}
+\START
+\section{a}\label{a}
+\kant
+\begin{figure}\rule{1cm}{0.8\textheight}
+\end{figure}
+\ref{a}
+\kant
+\end{document} 
