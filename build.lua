@@ -7,6 +7,11 @@ installfiles = {
 '*.sty'
 }
 
+sourcefiles =  {
+ "*.dtx"
+}
+
+
 specialformats = specialformats or {}
 
 -- latex-dev formats, used in config-dev to test against upcoming latex
